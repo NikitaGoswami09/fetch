@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+
+    <title>Movie Search App</title>
+<style>
+   body {
+    font-family: 'Arial', sans-serif;
+    background-color: black;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+}
+
+.container {
+    text-align: center;
+}
+
+.search-container {
+    margin-bottom: 20px;
+}
+
+input {
+    padding: 8px;
+    font-size: 16px;
+}
+
+button {
+    padding: 8px 16px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.results-container {
+    display: flex;
+    
+    
+}
+
+.movie-card {
+    width: 250px;
+    margin: 10px;
+    padding: 10px;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+h1{
+    color: blue;
+}
+ 
+</style>
+</head>
+
+
+<body>
+    <div class="container">
+        <h1>Movie Search App</h1>
+        <div class="search-container">
+            <input type="text" id="searchInput" placeholder="Enter a movie title">
+            <button onclick="searchMovie()">Search</button>
+        </div>
+        <div id="movieResults" class="results-container"></div>
+    </div>
+    <script>
+        function searchMovie() {
+    const apiKey = 'e768f845';
+    const searchInput = document.getElementById('searchInput').value;
+    const apiUrl = `http://www.omdbapi.com/?apikey=${apiKey}&s=${searchInput}`;
+
+    fetch(apiUrl)
+        .then(response => response.json())
+        .then(data => {
+            displayMovies(data.Search);
+        })
+        .catch(error => {
+            console.error('Error fetching data:', error);
+        });
+}
+
+function displayMovies(movies) {
+    const resultsContainer = document.getElementById('movieResults');
+    resultsContainer.innerHTML = '';
+
+    if (!movies) {
+        resultsContainer.innerHTML = '<p>No results found.</p>';
+        return;
+    }
+
+    movies.forEach(movie => {
+        const movieCard = document.createElement('div');
+        movieCard.classList.add('movie-card');
+        movieCard.innerHTML = `
+            <img src="${movie.Poster}" alt="${movie.Title}" style="width:100%">
+            <h3>${movie.Title}</h3>
+            <p>${movie.Year}</p>
+        `;
+        resultsContainer.appendChild(movieCard);
+    });
+}
+
+    </script>
+</body>
+</html>
